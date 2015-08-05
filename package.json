@@ -1,0 +1,24 @@
+{
+  "name": "frontend-deployment",
+  "version": "1.0.0",
+  "description": "ESH-frontend-deployment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wspandihai/ESH-frontend-deployment.git"
+  },
+  "keywords": [
+    "deployment"
+  ],
+  "author": "pandihai",
+  "bugs": {
+    "url": "https://github.com/wspandihai/ESH-frontend-deployment/issues"
+  },
+  "homepage": "https://github.com/wspandihai/ESH-frontend-deployment#readme",
+  "dependencies": {
+    "commander": "^2.8.1"
+  }
+}
