@@ -14,9 +14,9 @@ var exists = require('fs').existsSync;
 
 var qn = require('qn');
 
-
+var ItemCloudList = null;
 var FileCache = {};
-var cloud = new Cloud();
+var qnclient = promises.promisifyAll(qn.create(config.qn));
 module.exports = function(fileStr) {
 	var files = fileStr.split('+');
 	files = _.compact(files);
@@ -37,7 +37,9 @@ module.exports = function(fileStr) {
 
 var File = function(p) {
 	var extname = pathModule.extname(p);
-	this.path = pathModule.resolve(process.cwd(), p) + (extname ? '' : '.js');
+	p += (extname ? '' : '.js')
+	this.path = pathModule.resolve(process.cwd(), p);
+	this.rePath = p;
 	this.extname = extname || '.js';
 	this.exists = exists(this.path);
 	this.asdok = false;
@@ -62,27 +64,34 @@ File.prototype.sendToasd = function() {
 File.prototype.Cloud = function() {
 	//不存在或者没有保存到asd就跳过
 	if (!this.exists || !this.asdok) return Promise.resolve(this.path);
-	cloud.GetCloudList().then(function(cloudList) {
-		debugger;
+	GetCloudList()
+		.then(this.GetRemoveList)
+		.then(RemoveCloudList);
+
+}
+
+//返回可以删除的list
+File.prototype.GetRemoveList = function(cloudList) {
+	var rePath = this.rePath;
+	return promises.map(cloudList, function(cloudUrl) {
+		//暂时简单判断,如何进行较为严谨的判断
+		if (util.CloudKeyCanRemove(cloudUrl, rePath)) {
+			return cloudUrl;
+		}
+		return false;
 	})
-
 }
 
-function Cloud() {
-	this.qnclient = promises.promisifyAll(qn.create(config.qn));
-	this.ItemCloudList = null;
-}
-
-Cloud.prototype.GetCloudList = function() {
-	var ItemCloudList = this.ItemCloudList;
-	if (ItemCloudList) return Promise.resolve(this);
-	return this.qnclient.listAsync('/').then(function(arg) {
-		ItemCloudList = arg[0].items;
-		return this;
+//获取云上面的静态文件列表
+var GetCloudList = function() {
+	if (ItemCloudList) return promises.resolve(ItemCloudList);
+	return qnclient.listAsync('/').then(function(arg) {
+		ItemCloudList = ['/Static/js/common/$$headJs.js,ua/ua.js', '/Static/temp/USList.js'] //arg[0].items;
+		return ItemCloudList;
 	});
 }
 
-Cloud.prototype.Dispose = function() {
-	this.qnclient = null;
-	this.ItemCloudList = null;
+
+var RemoveCloudList = function() {
+
 }
