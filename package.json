@@ -19,6 +19,10 @@
   },
   "homepage": "https://github.com/wspandihai/ESH-frontend-deployment#readme",
   "dependencies": {
-    "commander": "^2.8.1"
+    "bluebird": "^2.9.34",
+    "commander": "^2.8.1",
+    "lodash": "^3.10.1",
+    "needle": "^0.10.0",
+    "qn": "^1.0.1"
   }
 }
