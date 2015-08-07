@@ -15,7 +15,7 @@ var Cloud = function() {
 
 
 Cloud.prototype.Start = function(file) {
-	if (!file.exists || !file.asdok) return Promise.resolve(this.path);
+	if (!file.exists || !file.asdok) return Promise.resolve(file);
 	return this.GetCloudList()
 		.then(this.GetRemoveList(file.rePath))
 		.then(this.RemoveCloudList);
