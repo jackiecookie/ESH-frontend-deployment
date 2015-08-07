@@ -48,6 +48,7 @@ var fileDeployment = function(files) {
 	}).map(function(arg, index) {
 		var file = FileCache[files[index]];
 		file.asdok = !!(arg && arg[1] == 'ok');
+		console.log(file.rePath + (file.asdok ? '上传成功' : '上传失败'));
 		return Cloud.Start(file);
 	}).then(function(files) {
 		if (files.length && files.length > 0) {

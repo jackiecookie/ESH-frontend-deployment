@@ -19,7 +19,7 @@ module.exports.GetContentTypeByExtname = function(extname) {
 
 var splitCloudUrl = function(cloudUrl) {
 	var result = [];
-	var regex = /\/Static\/(.*?)\/\$\$(.*)/;
+	var regex = /Static\/(.*?)\/\$\$(.*)/;
 	var regresult = regex.exec(cloudUrl);
 
 	if (regresult && regresult.length == 3) {
@@ -38,13 +38,12 @@ var judeUrl = function(cloudUrl, rePath) {
 }
 
 module.exports.CloudKeyCanRemove = function(cloudUrl, rePath) {
-	//http://182.168.1.162:8081/Static/js/common/$$headJs.js,ua/ua.js
 	if (judeUrl(cloudUrl, rePath)) {
 		return true;
 	}
 	var cloudUrls = splitCloudUrl(cloudUrl);
 	cloudUrl = _.dropWhile(cloudUrls, function(n) {
-		return !judeUrl(cloudUrl, rePath);
+		return !judeUrl(n, rePath);
 	});
 	return cloudUrls.length > 0;
 }

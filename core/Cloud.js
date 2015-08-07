@@ -7,6 +7,9 @@ var config = require('../config');
 var util = require('../util');
 var qnclient = promises.promisifyAll(qn.create(config.qn));
 
+var _ = require('lodash');
+
+
 
 var Cloud = function() {
 	this.ItemCloudList = null;
@@ -26,7 +29,8 @@ Cloud.prototype.GetCloudList = function() {
 	var ItemCloudList = this.ItemCloudList;
 	if (ItemCloudList) return promises.resolve(ItemCloudList);
 	return qnclient.listAsync('/').then(function(arg) {
-		ItemCloudList = ['/Static/js/common/$$headJs.js,ua/ua.js', '/Static/temp/USList.js'] //arg[0].items;
+		debugger;
+		ItemCloudList = arg[0].items;
 		return ItemCloudList;
 	});
 }
@@ -34,8 +38,9 @@ Cloud.prototype.GetCloudList = function() {
 //获得可以删除的列表
 Cloud.prototype.GetRemoveList = function(rePath) {
 	return function(cloudList) {
-		return promises.map(cloudList, function(cloudUrl) {
+		return promises.map(cloudList, function(cloudobj) {
 			//暂时简单判断,如何进行较为严谨的判断
+			var cloudUrl = cloudobj.key
 			if (util.CloudKeyCanRemove(cloudUrl, rePath)) {
 				return cloudUrl;
 			}
@@ -47,6 +52,8 @@ Cloud.prototype.GetRemoveList = function(rePath) {
 
 //删除key
 Cloud.prototype.RemoveCloudList = function(removeKeys) {
+	removeKeys = _.compact(removeKeys);
+	console.log('需要删除' + removeKeys.length + '个key');
 	return promises.map(removeKeys, function(removeKey) {
 		return qnclient.deleteAsync(removeKey);
 	})
