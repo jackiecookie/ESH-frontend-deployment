@@ -6,13 +6,13 @@ var _ = require('lodash');
 
 var config = require('../config');
 
-var util = require('../util');
-
 var fs = require('fs');
 
-var File = require('./File');
+var File = require('esh-deployment-cloud/File');
 
-var Cloud = require('./Cloud');
+var Cloud = require('esh-deployment-cloud');
+
+Cloud = new Cloud(config.qn);
 
 var FileCache = {};
 

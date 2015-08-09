@@ -1,5 +1,5 @@
 {
-  "name": "frontend-deployment",
+  "name": "easysofthome-frontend-deployment",
   "version": "1.0.0",
   "description": "ESH-frontend-deployment",
   "main": "index.js",
@@ -24,6 +24,6 @@
     "lodash": "^3.10.1",
     "ndir": "^0.1.5",
     "needle": "^0.10.0",
-    "qn": "^1.0.1"
+    "esh-deployment-cloud": "^1.0.0"
   }
 }
