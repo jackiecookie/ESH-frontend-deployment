@@ -21,7 +21,7 @@ var FileCache = {};
 //发送到asd
 var sendToasd = function(file) {
 	//不存在就跳过这一步骤
-	if (!file.exists || file.asdok) return Promise.resolve();
+	if (!file.exists || file.adsok) return Promise.resolve();
 
 	var data = {
 		rePath: file.rePath,
@@ -47,9 +47,11 @@ var fileDeployment = function(files) {
 		return sendToasd(file);
 	}).map(function(arg, index) {
 		var file = FileCache[files[index]];
-		file.asdok = !!(arg && arg[1] == 'ok');
-		console.log(file.rePath + (file.asdok ? '上传成功' : '上传失败'));
-		return Cloud.Start(file);
+		file.adsok = !!(arg && arg[1] == 'ok');
+		console.log(file.rePath + (file.adsok ? '上传成功' : '上传失败'));
+		file.adsok ?
+			return Cloud.Start(file): return Promise.resolve(file);
+
 	}).then(function(files) {
 		if (files.length && files.length > 0) {
 			files = _.dropWhile(files, function(file) {
